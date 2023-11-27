@@ -7,10 +7,6 @@ class ChatGPT {
   });
 
   public async chat(msg: string) {
-    console.log(
-      "******************************************************************"
-    );
-    console.log(process.env.OPENAI_API_KEY);
     try {
       const completion = await this.openai.chat.completions.create({
         messages: [{ role: "user", content: msg }],
