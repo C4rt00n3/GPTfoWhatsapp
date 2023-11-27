@@ -1,9 +1,16 @@
 import OpenAI from "openai";
+import "dotenv/config";
 
 class ChatGPT {
-  private openai = new OpenAI({});
+  private openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
 
   public async chat(msg: string) {
+    console.log(
+      "******************************************************************"
+    );
+    console.log(process.env.OPENAI_API_KEY);
     try {
       const completion = await this.openai.chat.completions.create({
         messages: [{ role: "user", content: msg }],
@@ -25,7 +32,6 @@ class ChatGPT {
         size: "1024x1024",
         quality: "standard",
       });
-      console.log(image.data);
       return image;
     } catch (error: any) {
       console.log(error);

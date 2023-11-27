@@ -61,7 +61,7 @@ class ChatBoot {
             await sendImage(number, image.data[0].url, `${title}`, wamid);
           }
         } else {
-          result.count_use != 1 && sendMessage(number, "gerando texto...");
+          result.count_use! > 1 && sendMessage(number, "gerando texto...");
 
           const res = await this.chatGPT.chat(
             `O nome de quem está conversando com você é ${name}. Esse é o texto dele: ${input}`

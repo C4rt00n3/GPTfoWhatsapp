@@ -37,9 +37,5 @@ lerna-debug.log*
 
 .env
 
-*.db
-*/migrations
-
-/prisma/migrations
-
-*.dev-jornal
+dev.db-journal
+dev.db
