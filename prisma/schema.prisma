@@ -13,7 +13,7 @@ datasource db {
 model NumberPhone {
   number String @unique
   date_now DateTime
-  conut_use Int? @default(0)
+  count_use Int? @default(0)
   name String
   @@map("number")
 }

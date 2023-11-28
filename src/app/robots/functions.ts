@@ -63,7 +63,6 @@ const sendMessage = async (number: string, message: string, wmaid?: string) => {
       axiosConfig
     )
     .then(function (response) {
-      console.log("É ela", response.data);
       return response.data;
     })
     .catch(function (error) {

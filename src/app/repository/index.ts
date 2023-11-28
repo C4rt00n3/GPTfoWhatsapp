@@ -5,13 +5,13 @@ export class PhoneNumber {
   number: string;
   name: string;
   date_now?: Date;
-  count_use?: number;
+  count_use?: number | null;
 
   constructor(
     number: string,
     name: string,
-    date_now?: Date,
-    count_use?: number
+    count_use?: number | null,
+    date_now?: Date
   ) {
     this.number = number;
     this.date_now = date_now;
@@ -35,6 +35,8 @@ export class Service {
       },
     });
 
+    console.log(find?.count_use);
+
     if (!find) {
       const phoneNumber = await this.prisma.numberPhone.create({
         data: {
@@ -52,29 +54,29 @@ export class Service {
       return phoneNumber;
     } else {
       if (this.isSameDay(find.date_now, new Date())) {
-        this.updateCount(number, name, find.conut_use! + 1);
+        console.log("UUUUUUUUU");
+        await this.updateCount(number, name, find.count_use! + 1);
       } else {
-        this.updateCount(number, name, 0);
+        await this.updateCount(number, name, 0);
       }
     }
 
     return find;
   }
 
-  updateCount(
+  async updateCount(
     number: string,
     name: string,
     count: number
   ): Promise<PhoneNumber> {
-    const data =
-      count == 0
-        ? {
-            conut_use: count,
-            date_now: new Date(),
-          }
-        : { conut_use: count };
+    console.log(count);
 
-    const phoneNumber = this.prisma.numberPhone.update({
+    const data = {
+      count_use: count,
+      date_now: new Date(),
+    };
+
+    const phoneNumber = await this.prisma.numberPhone.update({
       data,
       where: {
         number,

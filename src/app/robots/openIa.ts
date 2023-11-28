@@ -3,7 +3,7 @@ import "dotenv/config";
 
 class ChatGPT {
   private openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: "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",
   });
 
   public async chat(msg: string) {
@@ -23,7 +23,7 @@ class ChatGPT {
     try {
       const image = await this.openai.images.generate({
         prompt,
-        model: "dall-e-3",
+        model: "dall-e-2",
         n: 1,
         size: "1024x1024",
         quality: "standard",

@@ -5,7 +5,8 @@
   "main": "src/main.ts",
   "scripts": {
     "dev": "tsnd .",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/main.js"
   },
   "keywords": [],
   "author": "Rafael Felipe",

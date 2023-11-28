@@ -47,21 +47,25 @@ class ChatBoot {
       const service = new Service(this.prisma);
 
       const result = await service.findOrCreate(number, name);
-
+      console.log(result.count_use!);
       if (result.count_use! < 11 || number == "557781032674") {
         if (input.includes("/imagine")) {
           sendMessage(number, "Criando imagen, aguarde...", wamid);
-          const title =
-            "Escreva um título breve e claro para a imagem que você está criando.";
+          const res = await this.chatGPT.chat(
+            `crie um titulo pequeno e breve para oque há nesse input: ${input}`
+          );
+
           const image = await this.chatGPT.imagine(
             input.replace(new RegExp("/imagine", "ig"), "")
           );
 
           if (image.data[0].url) {
-            await sendImage(number, image.data[0].url, `${title}`, wamid);
+            await sendImage(number, image.data[0].url, `${res}`, wamid);
           }
         } else {
-          result.count_use! > 1 && sendMessage(number, "gerando texto...");
+          result.count_use &&
+            result.count_use > 1 &&
+            sendMessage(number, "gerando texto...");
 
           const res = await this.chatGPT.chat(
             `O nome de quem está conversando com você é ${name}. Esse é o texto dele: ${input}`
@@ -73,7 +77,7 @@ class ChatBoot {
       } else {
         sendMessage(
           number,
-          `Peço desculpas, ${name}, mas este projeto destina-se exclusivamente a fins de pesquisa e não é permitido para uso comercial. Para qualquer dúvida ou esclarecimento, por favor, entre em contato conosco. Agradecemos sua compreensão.`
+          `Peço desculpas, ${name}, mas este projeto destina-se exclusivamente a fins de pesquisa e não é permitido mais de 10 usos diarios. Para qualquer dúvida ou esclarecimento, por favor, entre em contato conosco. Agradecemos sua compreensão.`
         );
       }
     }
