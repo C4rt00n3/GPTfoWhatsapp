@@ -2,8 +2,11 @@ import OpenAI from "openai";
 import "dotenv/config";
 
 class ChatGPT {
+  private readonly open_api_key = process.env?.OPENAI_API_KEY;
+
   private openai = new OpenAI({
-    apiKey: "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",
+    apiKey: this.open_api_key ? this.open_api_key.toString() : "",
+    // "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"
   });
 
   public async chat(msg: string) {
