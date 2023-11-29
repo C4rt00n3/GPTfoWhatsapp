@@ -39,7 +39,6 @@ class ChatBoot {
     const service = new Service(this.prisma);
     const result = await service.findOrCreate(number, name);
 
-    console.log(result, input.includes("/imagine"));
     if (input.length > 200 || number != "557781032674") {
       sendMessage(
         number,
