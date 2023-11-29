@@ -67,9 +67,7 @@ class ChatBoot {
             result.count_use > 1 &&
             sendMessage(number, "gerando texto...");
 
-          const res = await this.chatGPT.chat(
-            `O nome de quem está conversando com você é ${name}. Esse é o texto dele: ${input}`
-          );
+          const res = await this.chatGPT.chat(input, name);
           if (res) {
             sendMessage(number, res, wamid);
           }

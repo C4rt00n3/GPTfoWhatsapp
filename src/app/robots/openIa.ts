@@ -9,10 +9,16 @@ class ChatGPT {
     // "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"
   });
 
-  public async chat(msg: string) {
+  public async chat(msg: string, name?: string) {
     try {
       const completion = await this.openai.chat.completions.create({
-        messages: [{ role: "user", content: msg }],
+        messages: [
+          {
+            role: "user",
+            content: `O nome de quem está conversando com você é ${name}`,
+          },
+          { role: "user", content: msg },
+        ],
         model: "gpt-3.5-turbo",
       });
       return completion.choices[0].message.content + "";
