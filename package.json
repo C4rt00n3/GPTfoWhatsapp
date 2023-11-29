@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/main.ts",
   "scripts": {
-    "dev": "yarn prisma migrate dev -n initDeploy --skip-generate && yarn start",
-    "build": "tsc && yarn prisma migrate dev -n initDeploy --skip-generate && npm run start",
+    "dev": "npx prisma migrate dev -n initDeploy --skip-generate && tsnd .",
+    "build": "tsc && yarn prisma migrate dev -n initDeploy --skip-generate",
     "start": "node build/main.js"
   },
   "keywords": [],
