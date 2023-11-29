@@ -47,10 +47,7 @@ export class Service {
         },
       });
 
-      sendMessage(
-        number,
-        "Lista de comandos:\n 1) /imagine Ele criar uma imagem de acordo com  oque você escreve apos o comando. você só pode usar 3 vezes \n 2) /dev Recebe informações do meu desenvolvedor. \n 3) Seu texto ele irá lhe responder desde que seja menor que 200 caracteres"
-      );
+      sendMessage(number, "Seu texto já está sendo gerado.");
 
       return phoneNumber;
     } else {
