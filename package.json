@@ -4,9 +4,9 @@
   "description": "",
   "main": "src/main.ts",
   "scripts": {
-    "dev": "tsnd .",
+    "dev": "tsnd . &&npx prisma migrate dev -n initDeploy --skip-generate",
     "build": "tsc",
-    "start": "node dist/main.js && npx prisma migrate dev -n initDeploy --skip-generate"
+    "start": "node dist/main.js"
   },
   "keywords": [],
   "author": "Rafael Felipe",
