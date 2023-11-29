@@ -10,11 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model NumberPhone {
+model Phone {
   number String @unique
-  date_now DateTime
-  count_use Int @default(0)
+  date_now DateTime @default(now())
+  count_use Int? @default(0)
   name String
-  image_count Int @default(0)
-  @@map("number")
+  image_count Int? @default(0)
+  @@map("phone")
 }

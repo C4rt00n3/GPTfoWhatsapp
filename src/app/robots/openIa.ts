@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import "dotenv/config";
+import { sendMessage } from "./functions";
 
 class ChatGPT {
   private readonly open_api_key = process.env?.OPENAI_API_KEY;
@@ -28,11 +29,15 @@ class ChatGPT {
     }
   }
 
-  public async imagine(prompt: string): Promise<OpenAI.Images.ImagesResponse> {
+  public async imagine(
+    prompt: string,
+    number: string,
+    wamid: string
+  ): Promise<OpenAI.Images.ImagesResponse> {
     try {
       const image = await this.openai.images.generate({
         prompt,
-        model: "dall-e-2",
+        model: "dall-e-3",
         n: 1,
         size: "1024x1024",
         quality: "standard",
@@ -40,6 +45,7 @@ class ChatGPT {
       return image;
     } catch (error: any) {
       console.log(error);
+      await sendMessage(number, error.error.message, wamid);
       return error;
     }
   }

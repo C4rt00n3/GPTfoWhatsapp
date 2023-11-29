@@ -5,15 +5,15 @@ export class PhoneNumber {
   number: string;
   name: string;
   date_now?: Date;
-  count_use?: number | null;
-  image_count?: number | null;
+  count_use?: number;
+  image_count?: number;
 
   constructor(
     number: string,
     name: string,
-    count_use?: number | null,
+    count_use?: number,
     date_now?: Date,
-    image_count?: number | null
+    image_count?: number
   ) {
     this.number = number;
     this.date_now = date_now;
@@ -30,18 +30,16 @@ export class Service {
     this.prisma = prisma;
   }
 
-  async findOrCreate(number: string, name: string): Promise<PhoneNumber> {
+  async findOrCreate(number: string, name: string) {
     const phoneNumberObject = new PhoneNumber(number, name);
-    const find = await this.prisma.numberPhone.findUnique({
+    const find = await this.prisma.phone?.findUnique({
       where: {
         number,
       },
     });
 
-    console.log(find?.count_use);
-
     if (!find) {
-      const phoneNumber = await this.prisma.numberPhone.create({
+      const phoneNumber = await this.prisma.phone?.create({
         data: {
           name: phoneNumberObject.name,
           number: phoneNumberObject.number,
@@ -51,34 +49,29 @@ export class Service {
 
       sendMessage(
         number,
-        "Lista de comandos:\n 1) /imagine | Ele criar uma imagem de acordo com  oque você escreve apos o comando. \n 2) /dev | Recebe informações do meu desenvolvedor."
+        "Lista de comandos:\n 1) /imagine Ele criar uma imagem de acordo com  oque você escreve apos o comando. você só pode usar 3 vezes \n 2) /dev Recebe informações do meu desenvolvedor. \n 3) Seu texto ele irá lhe responder desde que seja menor que 200 caracteres"
       );
 
       return phoneNumber;
     } else {
-      if (this.isSameDay(find.date_now, new Date())) {
-        console.log("UUUUUUUUU");
+      if (this.isSameDay(find.date_now!, new Date())) {
         await this.updateCount(number, name, find.count_use! + 1);
       } else {
-        await this.updateCount(number, name, 0);
+        await this.updateCount(number, name, 1);
       }
     }
 
     return find;
   }
 
-  async upCountImage(
-    numberP: string,
-    name: string,
-    count: number
-  ): Promise<PhoneNumber> {
+  async upCountImage(numberP: string, name: string, count: number) {
     const data = {
       count_use: count,
       date_now: new Date(),
       image_count: count + 1,
     };
 
-    const phoneNumber = await this.prisma.numberPhone.update({
+    const phoneNumber = await this.prisma.phone.update({
       data,
       where: {
         number: numberP,
@@ -89,11 +82,7 @@ export class Service {
     return phoneNumber;
   }
 
-  async updateCount(
-    number: string,
-    name: string,
-    count: number
-  ): Promise<PhoneNumber> {
+  async updateCount(number: string, name: string, count: number) {
     console.log(count);
 
     const data = {
@@ -101,7 +90,7 @@ export class Service {
       date_now: new Date(),
     };
 
-    const phoneNumber = await this.prisma.numberPhone.update({
+    const phoneNumber = await this.prisma.phone.update({
       data,
       where: {
         number,
