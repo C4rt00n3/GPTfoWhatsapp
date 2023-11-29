@@ -6,17 +6,20 @@ export class PhoneNumber {
   name: string;
   date_now?: Date;
   count_use?: number | null;
+  image_count?: number | null;
 
   constructor(
     number: string,
     name: string,
     count_use?: number | null,
-    date_now?: Date
+    date_now?: Date,
+    image_count?: number | null
   ) {
     this.number = number;
     this.date_now = date_now;
     this.count_use = count_use;
     this.name = name;
+    this.image_count = image_count;
   }
 }
 
@@ -48,7 +51,7 @@ export class Service {
 
       sendMessage(
         number,
-        "Lista de comandos:\n 1) /imagine | Ele criar uma imagen de acordo com  oque você escreve apos o comando. \n 2) /dev | Recebe informações do meu desenvolvedor."
+        "Lista de comandos:\n 1) /imagine | Ele criar uma imagem de acordo com  oque você escreve apos o comando. \n 2) /dev | Recebe informações do meu desenvolvedor."
       );
 
       return phoneNumber;
@@ -62,6 +65,28 @@ export class Service {
     }
 
     return find;
+  }
+
+  async upCountImage(
+    numberP: string,
+    name: string,
+    count: number
+  ): Promise<PhoneNumber> {
+    const data = {
+      count_use: count,
+      date_now: new Date(),
+      image_count: count + 1,
+    };
+
+    const phoneNumber = await this.prisma.numberPhone.update({
+      data,
+      where: {
+        number: numberP,
+        name,
+      },
+    });
+
+    return phoneNumber;
   }
 
   async updateCount(

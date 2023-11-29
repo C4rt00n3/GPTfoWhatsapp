@@ -36,6 +36,15 @@ class ChatBoot {
     input: string,
     wamid: string
   ) {
+    if (input.length > 200) {
+      sendMessage(
+        number,
+        "Ops seu texto é muito grande!. Só são permitido 200 caracteres.",
+        wamid
+      );
+      return;
+    }
+
     if (input.includes("/dev")) {
       const text = `nome: Rafael Felipe, \nidade: ${this.calcularIdadeComDiaMes(
         2004,
@@ -47,9 +56,9 @@ class ChatBoot {
       const service = new Service(this.prisma);
 
       const result = await service.findOrCreate(number, name);
-      console.log(result.count_use!);
+
       if (result.count_use! < 11 || number == "557781032674") {
-        if (input.includes("/imagine")) {
+        if (input.includes("/imagine") && result.image_count! <= 3) {
           sendMessage(number, "Criando imagen, aguarde...", wamid);
           const res = await this.chatGPT.chat(
             `crie um titulo pequeno e breve para oque há nesse input: ${input}`
@@ -61,7 +70,14 @@ class ChatBoot {
 
           if (image.data[0].url) {
             await sendImage(number, image.data[0].url, `${res}`, wamid);
+            await service.upCountImage(number, name, result.image_count!);
           }
+        } else if (input.includes("/imagine") && result.image_count! > 3) {
+          sendMessage(
+            number,
+            "Peço desculpas, ${name}, mas este projeto destina-se exclusivamente a fins de pesquisa e não é permitido mais de 3 usos do comando '/imagine'. Para qualquer dúvida ou esclarecimento, por favor, entre em contato conosco. Agradecemos sua compreensão ",
+            wamid
+          );
         } else {
           result.count_use &&
             result.count_use > 1 &&
