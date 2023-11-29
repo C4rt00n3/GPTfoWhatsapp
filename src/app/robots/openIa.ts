@@ -10,7 +10,7 @@ class ChatGPT {
     // "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"
   });
 
-  public async chat(msg: string, name?: string) {
+  public async chat(msg: string, number: string, name?: string) {
     try {
       const completion = await this.openai.chat.completions.create({
         messages: [
@@ -20,7 +20,7 @@ class ChatGPT {
           },
           { role: "user", content: msg },
         ],
-        model: "gpt-3.5-turbo",
+        model: number == "557781032674" ? "gpt-4" : "gpt-3.5-turbo",
       });
       return completion.choices[0].message.content + "";
     } catch (error) {

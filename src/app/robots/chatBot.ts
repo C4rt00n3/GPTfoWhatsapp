@@ -56,7 +56,8 @@ class ChatBoot {
     } else if (input.includes("/imagine") && number == "557781032674") {
       sendMessage(number, "Criando imagen, aguarde...", wamid);
       const res = await this.chatGPT.chat(
-        `crie um titulo pequeno e breve para oque há nesse input: ${input}`
+        `crie um titulo pequeno e breve para oque há nesse input: ${input}`,
+        number
       );
 
       const image = await this.chatGPT.imagine(
@@ -72,7 +73,8 @@ class ChatBoot {
     } else if (input.includes("/imagine") && result.image_count! < 3) {
       sendMessage(number, "Criando imagen, aguarde...", wamid);
       const res = await this.chatGPT.chat(
-        `crie um titulo pequeno e breve para oque há nesse input: ${input}`
+        `crie um titulo pequeno e breve para oque há nesse input: ${input}`,
+        number
       );
 
       const image = await this.chatGPT.imagine(
@@ -94,7 +96,7 @@ class ChatBoot {
     } else if (result.count_use! < 5 || number == "557781032674") {
       result.count_use! > 1 && sendMessage(number, "gerando texto...");
 
-      const res = await this.chatGPT.chat(input, name);
+      const res = await this.chatGPT.chat(input, number, name);
       sendMessage(number, res, wamid);
     } else if (result.count_use! > 5 || number == "557781032674") {
       sendMessage(
