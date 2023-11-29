@@ -54,10 +54,7 @@ class ChatBoot {
         2
       )},\nlinkedin:https://www.linkedin.com/in/rafael-felipe-3724ab21a/ ,\ngithub: https://github.com/C4rt00n3,\ncurriculo: https://drive.google.com/drive/u/0/my-drive,`;
       sendMessage(number, text, wamid);
-    } else if (
-      (input.includes("/imagine") && result.image_count! < 3) ||
-      number == "557781032674"
-    ) {
+    } else if (input.includes("/imagine") && number == "557781032674") {
       sendMessage(number, "Criando imagen, aguarde...", wamid);
       const res = await this.chatGPT.chat(
         `crie um titulo pequeno e breve para oque há nesse input: ${input}`
@@ -73,10 +70,23 @@ class ChatBoot {
         await sendImage(number, image.data[0].url, `${res}`, wamid);
         await service.upCountImage(number, name, result.image_count!);
       }
-    } else if (
-      (input.includes("/imagine") && result.image_count! > 3) ||
-      number == "557781032674"
-    ) {
+    } else if (input.includes("/imagine") && result.image_count! < 3) {
+      sendMessage(number, "Criando imagen, aguarde...", wamid);
+      const res = await this.chatGPT.chat(
+        `crie um titulo pequeno e breve para oque há nesse input: ${input}`
+      );
+
+      const image = await this.chatGPT.imagine(
+        input.replace(new RegExp("/imagine", "ig"), ""),
+        number,
+        wamid
+      );
+
+      if (image.data[0].url) {
+        await sendImage(number, image.data[0].url, `${res}`, wamid);
+        await service.upCountImage(number, name, result.image_count!);
+      }
+    } else if (input.includes("/imagine") && result.image_count! > 3) {
       sendMessage(
         number,
         `Peço desculpas, ${name}, mas este projeto destina-se exclusivamente a fins de pesquisa e não é permitido mais de 3 usos do comando '/imagine'. Para qualquer dúvida ou esclarecimento, por favor, entre em contato conosco. Agradecemos sua compreensão`,
