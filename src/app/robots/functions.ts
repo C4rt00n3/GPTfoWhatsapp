@@ -63,10 +63,10 @@ const sendMessage = async (number: string, message: string, wmaid?: string) => {
       axiosConfig
     )
     .then(function (response) {
-      return response.data;
+      return response;
     })
     .catch(function (error) {
-      console.log(error);
+      console.log(error.data);
     });
 };
 
@@ -102,67 +102,6 @@ const sendImage = async (
     });
 };
 
-const sendDevContact = async (number: string, wmaid: string) => {
-  axios
-    .post(
-      `https://graph.facebook.com/v14.0/${process.env.WAID}/messages`,
-      {
-        messaging_product: "whatsapp",
-        context: {
-          message_id: wmaid,
-        },
-        to: number,
-        type: "contacts",
-        contacts: [
-          {
-            birthday: "2006-04-14",
-            emails: [
-              {
-                email: "jeffersunde72@gmail.com",
-                type: "WORK",
-              },
-            ],
-            name: {
-              first_name: "Jeffer",
-              formatted_name: "Jeffer Marcelino",
-              last_name: "Sunde",
-            },
-            org: {
-              company: "CEG Microsystems",
-              department: "Tech",
-              title: "Developer",
-            },
-            phones: [
-              {
-                phone: "+258 84 399 7730",
-                type: "WORK",
-                wa_id: "258843997730",
-              },
-              {
-                phone: "+258 87 012 6103",
-                type: "HOME",
-              },
-            ],
-            urls: [
-              {
-                url: "https://github.com/JefferMarcelino",
-                type: "WORK",
-              },
-            ],
-          },
-        ],
-      },
-      axiosConfig
-    )
-
-    .then(function (response) {
-      return response;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
-
 const removeCommand = (command: string, text: string) => {
   const slipted = text.split(" ");
   let params = "";
@@ -181,7 +120,6 @@ const generateRandomInteger = (max: number) => {
 export {
   sendMessage,
   sendImage,
-  sendDevContact,
   removeCommand,
   toTitleCase,
   generateRandomInteger,
