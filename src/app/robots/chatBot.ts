@@ -63,7 +63,7 @@ class ChatBoot {
         sendMessage(number, "No minino 5 no name", wamid)
       }
 
-      if (!res) {
+      if (res.length == 0) {
         sendMessage(number, "Não encontramos nada. confira o seu nome.", wamid)
         return
       }
