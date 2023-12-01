@@ -40,7 +40,7 @@ class ChatBoot {
     const result = await service.findOrCreate(number, name);
 
     console.log(wamid);
-    if (input.length > 200 || (number == "557781032674" && wamid)) {
+    if (input.length > 200 && number != "557781032674") {
       sendMessage(
         number,
         "Ops seu texto é muito grande!. Só são permitido 200 caracteres.",
