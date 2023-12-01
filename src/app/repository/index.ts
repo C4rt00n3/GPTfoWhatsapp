@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { sendMessage } from "../robots/functions";
 import Format from "../class/Format";
 import readline from 'readline';
-import TwitterX from "../class/TwitterX";
 
 export class PhoneNumber {
   number: string;
