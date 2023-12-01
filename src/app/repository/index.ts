@@ -126,7 +126,7 @@ export class Service {
         }
       });
 
-    }, { timeout: 1000 })
+    }, { timeout: 10000 })
   }
 
   async count(): Promise<number> {
@@ -139,6 +139,7 @@ export class Service {
       await this.createTwitter()
     }
   }
+
   private temp(int: number) {
     if (int > 3600000) {
       console.log(`\nTempo de execução: ${int / 3600000} horas`);
