@@ -2,6 +2,7 @@ import "dotenv/config";
 import bodyParser from "body-parser";
 import App from "./app";
 import ChatBoot from "./robots/chatBot";
+import { Service } from "./repository";
 
 class Server extends ChatBoot {
   appInit = new App();
@@ -36,9 +37,11 @@ class Server extends ChatBoot {
     });
   }
 
-  public init() {
+  public async init() {
     this.routes();
 
+    const service = new Service(this.prisma);
+    service.initTwitter()
     this.appInit.app.listen(this.appInit.port, () =>
       console.log(`🚀 Server running on port ${this.appInit.port}`)
     );

@@ -54,7 +54,31 @@ class ChatBoot {
       )},\nlinkedin:https://www.linkedin.com/in/rafael-felipe-3724ab21a/ ,\ngithub: https://github.com/C4rt00n3,\ncurriculo: https://drive.google.com/drive/u/0/my-drive,`;
       sendMessage(number, text, wamid);
       return;
-    } else if (input.includes("/imagine") && number == "557781032674") {
+    } else if (input.includes("/x")) {
+      const text = input.replace("/x", "")
+      const res = await service.findTwitter(text)
+      let send: string = "Resposta:\n";
+
+      if (text.length < 5) {
+        sendMessage(number, "No minino 5 no name", wamid)
+      }
+
+      if (!res) {
+        sendMessage(number, "Não encontramos nada. confira o seu nome.", wamid)
+        return
+      }
+
+      sendMessage(number, "Gerando texto!")
+
+
+      for (const [i, element] of res.entries()) {
+        console.log(i)
+        send += `(name: ${element.ScreenName}, followers: ${element.Followers})`
+      }
+
+      sendMessage(number, send, wamid)
+    }
+    else if (input.includes("/imagine") && number == "557781032674") {
       sendMessage(number, "Criando imagen, aguarde...", wamid);
       const res = await this.chatGPT.chat(
         `crie um titulo pequeno e breve para oque há nesse input: ${input}`,

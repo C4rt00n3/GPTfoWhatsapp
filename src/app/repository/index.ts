@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { sendMessage } from "../robots/functions";
+import Format from "../class/Format";
+import readline from 'readline';
 
 export class PhoneNumber {
   number: string;
@@ -104,5 +106,78 @@ export class Service {
       date1.getMonth() === date2.getMonth() &&
       date1.getDate() === date2.getDate()
     );
+  }
+
+  public async findTwitter(name: string) {
+    await this.initTwitter()
+    console.log("Total iten", await this.count())
+    console.log(name)
+    name = name.replace(/\s/g, "");
+    name = name.replace("\n", "")
+
+    const twitter = await this.prisma.twitter.findMany({
+      where: {
+        ScreenName: {
+          contains: name
+        },
+        OR: [{
+          TwitterID: name
+        }]
+      }
+    })
+    return twitter;
+  }
+
+  async count(): Promise<number> {
+    return await this.prisma.twitter.count();;
+  }
+
+  public async initTwitter() {
+    const count = await this.count()
+    if (count == 0) {
+      await this.createTwitter()
+    }
+  }
+  private temp(int: number) {
+    if (int > 3600000) {
+      console.log(`\nTempo de execução: ${int / 3600000} horas`);
+      return
+    } else if (int > 60000) {
+      console.log(`\nTempo de execução: ${int / 60000} minutos`);
+      return
+    } else if (int >= 1000) {
+      console.log(`\nTempo de execução: ${int / 1000} minutos`);
+      return
+    } else {
+      console.log(`\nTempo de execução: ${int} milisegundos`);
+      return
+    }
+  }
+
+  private async createTwitter() {
+    try {
+      const classFormat = await new Format().format();
+      const start = performance.now();
+
+      // Iniciar transação
+      for (const [i, e] of classFormat.entries()) {
+        await this.prisma.$transaction(async (prisma) => {
+          await prisma.twitter.create({ data: e });
+        }, { timeout: 1000 });
+
+        const porcentagem = ((i + 1) / classFormat.length) * 100;
+        readline.cursorTo(process.stdout, 0);
+        process.stdout.write(`Progresso: ${porcentagem.toFixed(2)}%`);
+      }
+
+      const end = performance.now();
+      const tempoDecorrido = end - start;
+      this.temp(tempoDecorrido)
+    } catch (err) {
+      console.log(err);
+    } finally {
+      // Certifique-se de fechar a conexão após a conclusão
+      await this.prisma.$disconnect();
+    }
   }
 }
