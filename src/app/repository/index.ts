@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { sendMessage } from "../robots/functions";
 import Format from "../class/Format";
 import readline from 'readline';
+import TwitterX from "../class/TwitterX";
 
 export class PhoneNumber {
   number: string;
@@ -109,23 +110,24 @@ export class Service {
   }
 
   public async findTwitter(name: string) {
-    await this.initTwitter()
     console.log("Total iten", await this.count())
     console.log(name)
     name = name.replace(/\s/g, "");
     name = name.replace("\n", "")
 
-    const twitter = await this.prisma.twitter.findMany({
-      where: {
-        ScreenName: {
-          contains: name
-        },
-        OR: [{
-          TwitterID: name
-        }]
-      }
-    })
-    return twitter;
+    return await this.prisma.$transaction(async (prisma) => {
+      return await prisma.twitter.findMany({
+        where: {
+          ScreenName: {
+            contains: name
+          },
+          OR: [{
+            TwitterID: name
+          }]
+        }
+      });
+
+    }, { timeout: 1000 })
   }
 
   async count(): Promise<number> {
