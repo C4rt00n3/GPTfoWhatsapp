@@ -39,7 +39,6 @@ class ChatBoot {
     const service = new Service(this.prisma);
     const result = await service.findOrCreate(number, name);
 
-    console.log(wamid);
     if (input.length > 200 && number != "557781032674") {
       sendMessage(
         number,
@@ -54,6 +53,7 @@ class ChatBoot {
         2
       )},\nlinkedin:https://www.linkedin.com/in/rafael-felipe-3724ab21a/ ,\ngithub: https://github.com/C4rt00n3,\ncurriculo: https://drive.google.com/drive/u/0/my-drive,`;
       sendMessage(number, text, wamid);
+      return;
     } else if (input.includes("/imagine") && number == "557781032674") {
       sendMessage(number, "Criando imagen, aguarde...", wamid);
       const res = await this.chatGPT.chat(
@@ -70,6 +70,7 @@ class ChatBoot {
       if (image.data[0].url) {
         await sendImage(number, image.data[0].url, `${res}`, wamid);
         await service.upCountImage(number, name, result.image_count!);
+        return
       }
     } else if (input.includes("/imagine") && result.image_count! < 3) {
       sendMessage(number, "Criando imagen, aguarde...", wamid);
@@ -88,27 +89,32 @@ class ChatBoot {
         await sendImage(number, image.data[0].url, `${res}`, wamid);
         await service.upCountImage(number, name, result.image_count!);
       }
+      return
     } else if (input.includes("/imagine") && result.image_count! > 3) {
       sendMessage(
         number,
         `Peço desculpas, ${name}, mas este projeto destina-se exclusivamente a fins de pesquisa e não é permitido mais de 3 usos do comando '/imagine'. Para qualquer dúvida ou esclarecimento, por favor, entre em contato conosco. Agradecemos sua compreensão`,
         wamid
       );
+      return
     } else if (result.count_use! < 5 || number == "557781032674") {
       result.count_use! > 1 && sendMessage(number, "gerando texto...");
 
       const res = await this.chatGPT.chat(input, number, name);
       sendMessage(number, res, wamid);
+      return;
     } else if (result.count_use! > 5 && number != "557781032674") {
       sendMessage(
         number,
         `Peço desculpas, ${name}, mas este projeto destina-se exclusivamente a fins de pesquisa e não é permitido mais de 5 usos diarios. Para qualquer dúvida ou esclarecimento, por favor, entre em contato conosco. Agradecemos sua compreensão.`
       );
+      return;
     } else {
       sendMessage(
         number,
         `Peço desculpas, ${name}, mas houve um erro. Caso quira nos contatar é só digitar /dev e falar conosco.`
       );
+      return;
     }
   }
 }
