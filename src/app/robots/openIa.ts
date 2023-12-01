@@ -16,7 +16,7 @@ class ChatGPT {
         messages: [
           {
             role: "user",
-            content: `O nome de quem está conversando com você é ${name}`,
+            content: `O nome de quem está conversando com você é ${name}. por favor se refira a essa pessoa como ${name}.`,
           },
           { role: "user", content: msg },
         ],
