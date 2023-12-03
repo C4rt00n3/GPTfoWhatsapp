@@ -41,6 +41,7 @@ class ChatBoot {
   }
 
   private async imagine(result: iResult, number: string, input: string, name: string, wamid: string) {
+    await this.service.upCountImage(number, name, result.image_count!)
     if (input.includes("/imagine") && result.image_count! < 3 || number === "557781032674") {
       sendMessage(number, "Criando imagen, aguarde...", wamid);
       const res = await this.chatGPT.chat(
