@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { sendMessage } from "../robots/functions";
 import Format from "../class/Format";
 import readline from 'readline';
+import { iResult } from "../robots/chatBot";
 
 export class PhoneNumber {
   number: string;
@@ -30,6 +31,16 @@ export class Service {
 
   constructor(prisma: PrismaClient) {
     this.prisma = prisma;
+  }
+
+
+  public async mudeCountImage(result: iResult) {
+    await this.prisma.phone.update({
+      where: result,
+      data: {
+        image_count: 0
+      }
+    })
   }
 
   async findOrCreate(number: string, name: string) {

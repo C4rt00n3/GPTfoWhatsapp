@@ -3,7 +3,7 @@ import { sendMessage, sendImage } from "./functions";
 import ChatGPT from "./openIa";
 import { PrismaClient } from "@prisma/client";
 
-interface iResult {
+export interface iResult {
   number: string;
   date_now: Date;
   count_use: number | null;
@@ -41,8 +41,12 @@ class ChatBoot {
   }
 
   private async imagine(result: iResult, number: string, input: string, name: string, wamid: string) {
-    await this.service.upCountImage(number, name, result.image_count!)
+    if (this.service.isSameDay(result.date_now, new Date())) {
+      await this.service.mudeCountImage(result)
+    }
+
     if (input.includes("/imagine") && result.image_count! < 3 || number === "557781032674") {
+      await this.service.upCountImage(number, name, result.image_count!)
       sendMessage(number, "Criando imagen, aguarde...", wamid);
       const res = await this.chatGPT.chat(
         `crie um titulo pequeno e breve para oque há nesse input: ${input}`,
@@ -64,7 +68,7 @@ class ChatBoot {
 
     sendMessage(
       number,
-      `Peço desculpas, ${name}, mas este projeto destina-se exclusivamente a fins de pesquisa e não é permitido mais de 3 usos do comando '/imagine'. Para qualquer dúvida ou esclarecimento, por favor, entre em contato conosco. Agradecemos sua compreensão`,
+      `Peço desculpas, ${name}, mas este projeto destina-se exclusivamente a fins de pesquisa e não é permitido mais de 3 usos diarios do comando '/imagine'. Para qualquer dúvida ou esclarecimento, por favor, entre em contato conosco. Agradecemos sua compreensão`,
       wamid
     );
 
