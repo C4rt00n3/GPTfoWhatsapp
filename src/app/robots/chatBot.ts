@@ -71,7 +71,10 @@ class ChatBoot {
   }
 
   private async textGenerate(result: iResult, number: string, input: string, name: string, wamid: string) {
-    if (result.count_use! < 5 || number === "557781032674") {
+    if (input.length > 200) {
+      this.maxText(number, wamid)
+      return;
+    } else if (result.count_use! < 5 || number === "557781032674") {
       result.count_use! > 1 && sendMessage(number, "gerando texto...");
 
       const res = await this.chatGPT.chat(input, number, name);
@@ -136,10 +139,8 @@ class ChatBoot {
   ) {
     const result = await this.service.findOrCreate(number, name);
 
-    if (input.length > 200) {
-      this.maxText(number, wamid)
-      return;
-    } else if (input.includes("/imagine")) {
+
+    if (input.includes("/imagine")) {
       await this.imagine(result, number, input, name, wamid)
       return
     } else if (input.includes("/dev")) {
