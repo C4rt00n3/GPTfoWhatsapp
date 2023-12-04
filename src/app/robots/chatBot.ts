@@ -76,7 +76,7 @@ class ChatBoot {
   }
 
   private async textGenerate(result: iResult, number: string, input: string, name: string, wamid: string) {
-    if (input.length > 200) {
+    if (input.length > 200 || number === "557781032674") {
       this.maxText(number, wamid)
       return;
     } else if (result.count_use! < 5 || number === "557781032674") {
